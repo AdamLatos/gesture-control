@@ -1,8 +1,6 @@
 # Gesture control
 Gesture music player control.
 
-# How to run
-
 ## VLC Version:
 
 * In control.py: comment out the spotify import.  
