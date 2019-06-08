@@ -12,14 +12,15 @@ scope = '''user-read-playback-state user-modify-playback-state
 
 def music_toggle_play():
     devices = sp.devices()['devices']
-    if(sp.current_playback()['is_playing']):
-        for dev in devices:
-            dev_id = dev['id']
-            sp.pause_playback(dev_id)
-    else:
-        for dev in devices:
-            dev_id = dev['id']
-            sp.start_playback(dev_id)
+    if(sp.current_playback()):
+        if(sp.current_playback()['is_playing']):
+            for dev in devices:
+                dev_id = dev['id']
+                sp.pause_playback(dev_id)
+        else:
+            for dev in devices:
+                dev_id = dev['id']
+                sp.start_playback(dev_id)
 
 def music_vol_up():
     devices = sp.devices()['devices']
@@ -36,7 +37,7 @@ def music_vol_down():
     for dev in devices:
         dev_id = dev['id']
         vol = dev['volume_percent']
-        vol += 10
+        vol -= 10
         if vol < 0:
             vol = 0
         sp.volume(vol, dev_id)
