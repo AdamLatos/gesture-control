@@ -1,5 +1,5 @@
-#import Vlc as player
-import Spotify as player
+import Vlc as player
+#import Spotify as player
 #import control_helpers
 import cv2
 import numpy as np
@@ -275,11 +275,11 @@ while True:
         elif cx_last > cx:
             trackprev_cnt = 0
             tracknext_cnt += 1
-        if tracknext_cnt > 3:
+        if tracknext_cnt > 5:
             player.music_next()
             tracknext_cnt = 0
             trackprev_cnt = 0
-        elif trackprev_cnt > 3:
+        elif trackprev_cnt > 5:
             player.music_prev()
             tracknext_cnt = 0
             trackprev_cnt = 0
