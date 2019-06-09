@@ -6,7 +6,7 @@ import numpy as np
 import math
 from matplotlib import pyplot as plt
 
-DEBUG = 1
+DEBUG = 0
 gestures = [0]*10
 gesture_last = 0
 now_playing = False
@@ -19,6 +19,7 @@ volup_cnt = 0
 voldown_cnt = 0
 tracknext_cnt = 0
 trackprev_cnt = 0
+font = cv2.FONT_HERSHEY_SIMPLEX
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 back_sub = cv2.createBackgroundSubtractorKNN(history = 1000, detectShadows=False)
@@ -227,17 +228,28 @@ while True:
     print(gestures)
     print(gesture_now)
 
+    if gesture_now == 1:
+        status = "Volume (up/down)"
+    elif gesture_now == 2:
+        status = "Track (left/right)"
+    elif gesture_now == 3:
+        status = "Play"
+    elif gesture_now == 4:
+        status = "Stop"
+    else:
+        status = ""
+
     # Control music player with gestures
     if gesture_now == 3 and not now_playing:
         player.music_toggle_play()
         now_playing = True
 
-    if gesture_now >= 4 and now_playing:
+    if gesture_now == 4 and now_playing:
         player.music_toggle_play()
         now_playing = False
 
     #if (gesture_now == 2 and gesture_last == 2) or (gesture_now == 3 and gesture_last == 3) and now_playing:
-    if gesture_now == 1 and gesture_last == 1:    
+    if gesture_now == 1 and gesture_last == 1:
         if cy_last < cy:
             voldown_cnt += 1
             volup_cnt = 0
@@ -246,10 +258,15 @@ while True:
             volup_cnt += 1
         if volup_cnt > 3:
             player.music_vol_up()
+            voldown_cnt = 0
             volup_cnt = 0
         elif voldown_cnt > 3:
             player.music_vol_down()
             voldown_cnt = 0
+            volup_cnt = 0
+    else:
+        volup_cnt = 0
+        voldown_cnt = 0
 
     if gesture_now == 2 and gesture_last == 2:
         if cx_last < cx:
@@ -261,11 +278,14 @@ while True:
         if tracknext_cnt > 3:
             player.music_next()
             tracknext_cnt = 0
+            trackprev_cnt = 0
         elif trackprev_cnt > 3:
             player.music_prev()
+            tracknext_cnt = 0
             trackprev_cnt = 0
-
-
+    else:
+        tracknext_cnt = 0
+        trackprev_cnt = 0
 
     print(volup_cnt, voldown_cnt)
 
@@ -273,6 +293,7 @@ while True:
     cy_last = cy
     cx_last = cx
 
+    cv2.putText(img, status, (100,100), font, 1,(255,255,255),3,cv2.LINE_AA)
     cv2.imshow('img', img)
     cv2.imshow('end', thresh)
     cv2.setMouseCallback("hsv_mask", value_check)
@@ -284,3 +305,5 @@ while True:
         break
 cap.release()
 cv2.destroyAllWindows()
+if now_playing:
+    player.music_toggle_play()
