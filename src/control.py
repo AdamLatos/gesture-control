@@ -219,16 +219,20 @@ while True:
 
     # Median filter of gestures
     gestures = gestures[1:] + [defects_cnt]
-    gesture_now = max(set(gestures), key=gestures.count)
+    max_gesture = max(set(gestures), key=gestures.count)
+    if gestures.count(max_gesture) > 5:
+        gesture_now = max_gesture
+    else:
+        gesture_now = 0
     print(gestures)
     print(gesture_now)
 
     # Control music player with gestures
-    if gesture_now >= 3 and not now_playing:
+    if gesture_now == 3 and not now_playing:
         player.music_toggle_play()
         now_playing = True
 
-    if gesture_now == 4 and now_playing:
+    if gesture_now >= 4 and now_playing:
         player.music_toggle_play()
         now_playing = False
 
