@@ -2,7 +2,7 @@ import spotipy
 import spotipy.util as util
 
 client_id = '57583cfec79b460086a6d1797e37b4e6'
-client_secret = 'af01a3d3668546c69af4d80081f3b0e6'
+client_secret = # your secret dev code 
 username = 'qrog3t1yh7hjxlgmrl1v935sp'
 
 
